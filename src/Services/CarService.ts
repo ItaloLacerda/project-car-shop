@@ -13,8 +13,18 @@ export default class CarService {
   public async register(data: ICar) {
     const carODM = new CarODM();
     const newCar = await carODM.create(data);
-    console.log(newCar);
-    
     return this.createCarDomain(newCar);
+  }
+
+  public async findAll() {
+    const carODM = new CarODM();
+    const allCar = await carODM.read() as ICar[];
+    return allCar.map((car) => this.createCarDomain(car));
+  }
+
+  public async findById(id: string) {
+    const carODM = new CarODM();
+    const car = await carODM.findById(id) as ICar;
+    return this.createCarDomain(car);
   }
 }
