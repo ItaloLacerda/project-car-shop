@@ -11,19 +11,19 @@ export default class CarService {
     return null;
   }
 
-  public async register(data: ICar) {
+  async register(data: ICar) {
     const carODM = new CarODM();
     const newCar = await carODM.create(data);
     return this.createCarDomain(newCar);
   }
 
-  public async findAll() {
+  async findAll() {
     const carODM = new CarODM();
     const allCar = await carODM.read() as ICar[];
     return allCar.map((car) => this.createCarDomain(car));
   }
 
-  public async findById(id: string) {
+  async findById(id: string) {
     const carODM = new CarODM();
     
     const car = await carODM.findById(id) as ICar;
@@ -31,5 +31,14 @@ export default class CarService {
       throw new Errors('404', 'Car not found');
     }
     return this.createCarDomain(car);
+  }
+
+  async update(id: string, data: ICar) {
+    const carODM = new CarODM();
+    const newCar = await carODM.update(id, data) as ICar;
+    if (!newCar) {
+      throw new Errors('404', 'Car not found');
+    }
+    return this.createCarDomain(newCar);
   }
 }
