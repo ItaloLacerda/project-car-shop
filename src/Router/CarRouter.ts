@@ -5,8 +5,12 @@ const routes = Router();
 
 const Controller = new CarController();
 
-const { create } = Controller;
+const { create, findAll, findById } = Controller;
 
 routes.post('/', create);
+
+routes.get('/', findAll);
+
+routes.get('/:id', findById);
 
 export default routes;
