@@ -31,6 +31,10 @@ abstract class AbstractODM<T> {
       { new: true },
     );
   }
+
+  public async read(): Promise<T[] | null> {
+    return this.model.find({});
+  }
 }
   
 export default AbstractODM;
