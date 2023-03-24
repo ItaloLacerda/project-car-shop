@@ -32,4 +32,13 @@ export default class MotorcycleService {
     }
     return this.createMotorcycleDomain(motorcycle);
   }
+
+  async update(id: string, data: IMotorcycle) {
+    const motorcycleODM = new MotorcycleODM();
+    const newMotorcycle = await motorcycleODM.update(id, data) as IMotorcycle;
+    if (!newMotorcycle) {
+      throw new Errors('404', 'Motorcycle not found');
+    }
+    return this.createMotorcycleDomain(newMotorcycle);
+  }
 }
