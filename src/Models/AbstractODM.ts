@@ -1,12 +1,10 @@
 import {
-  isValidObjectId,
   Model,
   models,
   Schema,
   UpdateQuery,
   model,
 } from 'mongoose';
-import Errors from '../Utils/erros/Erros';
   
 abstract class AbstractODM<T> {
   protected model: Model<T>;
@@ -24,8 +22,6 @@ abstract class AbstractODM<T> {
   }
   
   async update(_id: string, obj: Partial<T>): Promise<T | null> {
-    if (!isValidObjectId(_id)) throw new Errors('422', 'Invalid mongo id');
-    
     return this.model.findByIdAndUpdate(
       { _id },
       { ...obj } as UpdateQuery<T>,
@@ -38,8 +34,11 @@ abstract class AbstractODM<T> {
   }
 
   async delete(_id: string) {
-    if (!isValidObjectId(_id)) throw new Errors('422', 'Invalid mongo id');
     return this.model.deleteOne({ _id });
+  }
+
+  async findById(_id: string): Promise<T | null> {
+    return this.model.findById({ _id });
   }
 }
   
