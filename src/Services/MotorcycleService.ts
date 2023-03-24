@@ -4,6 +4,9 @@ import MotorcycleODM from '../Models/MotorcycleODM';
 import Errors from '../Utils/erros/Erros';
 
 export default class MotorcycleService {
+  private errorMessage: string;
+
+  constructor() { this.errorMessage = 'Motorcycle not found'; }
   private createMotorcycleDomain(motorcycle: IMotorcycle): Motorcycle | null {
     if (motorcycle) {
       return new Motorcycle(motorcycle);
@@ -28,7 +31,7 @@ export default class MotorcycleService {
     
     const motorcycle = await motorcycleODM.findById(id) as IMotorcycle;
     if (!motorcycle) {
-      throw new Errors('404', 'Motorcycle not found');
+      throw new Errors('404', this.errorMessage);
     }
     return this.createMotorcycleDomain(motorcycle);
   }
@@ -37,8 +40,17 @@ export default class MotorcycleService {
     const motorcycleODM = new MotorcycleODM();
     const newMotorcycle = await motorcycleODM.update(id, data) as IMotorcycle;
     if (!newMotorcycle) {
-      throw new Errors('404', 'Motorcycle not found');
+      throw new Errors('404', this.errorMessage);
     }
     return this.createMotorcycleDomain(newMotorcycle);
+  }
+
+  async delete(id: string) {
+    const motorcycleODM = new MotorcycleODM();
+    const deleteMotorcycle = await motorcycleODM.delete(id);
+    if (deleteMotorcycle.deletedCount === 0) {
+      throw new Errors('404', this.errorMessage);
+    }
+    return deleteMotorcycle;
   }
 }
