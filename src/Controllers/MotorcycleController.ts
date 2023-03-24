@@ -9,7 +9,7 @@ export default class MotorcycleController {
     this.service = new MotorcycleService();
   }
 
-  public create = async (req: Request, res: Response, next: NextFunction) => {
+  create = async (req: Request, res: Response, next: NextFunction) => {
     const { model, year, color, status, buyValue,
       category, engineCapacity } = req.body;
     const motorcycle: IMotorcycle = {
@@ -30,7 +30,7 @@ export default class MotorcycleController {
     }
   };
 
-  public findAll = async (_req: Request, res: Response, next: NextFunction) => {
+  findAll = async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const allMotorcycle = await this.service.findAll();
       return res.status(200).json(allMotorcycle);
@@ -39,7 +39,7 @@ export default class MotorcycleController {
     }
   };
 
-  public findById = async (req: Request, res: Response, next: NextFunction) => {
+  findById = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     
     try {
@@ -50,13 +50,24 @@ export default class MotorcycleController {
     }
   };
 
-  public update = async (req: Request, res: Response, next: NextFunction) => {
+  update = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     const { body } = req;
     
     try {
       const newMotorcycle = await this.service.update(id, body);
       return res.status(200).json(newMotorcycle);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  removeVehicle = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+    
+    try {
+      await this.service.delete(id);
+      return res.status(204).json();
     } catch (error) {
       next(error);
     }
